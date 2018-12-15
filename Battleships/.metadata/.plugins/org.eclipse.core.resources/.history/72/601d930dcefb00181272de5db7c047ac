@@ -1,0 +1,5 @@
+package battleships.model;
+
+public class EnemyBoard {
+
+}

@@ -1,0 +1,9 @@
+module battleships{
+	requires transitive javafx.base;
+	requires transitive javafx.controls;
+	requires javafx.graphics;
+	requires javafx.fxml;
+	
+	exports battleships to javafx.graphics;
+	exports battleships.controller;
+}

@@ -1,0 +1,27 @@
+package battleships.controller;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class SimpleAI {
+	public ArrayList<Integer> numbers;   
+	private Random randomGenerator = new Random();
+	
+	SimpleAI(){
+		numbers = new ArrayList<Integer>();
+		this.generate();
+	}
+	
+	public void generate() {
+		while (numbers.size() < 101) {
+			int random = randomGenerator .nextInt(101);
+			if (!numbers.contains(random)) {
+				numbers.add(random);
+			}
+		}
+	}
+	
+	public int getNumber(int i) {
+		return numbers.get(i);
+	}
+}

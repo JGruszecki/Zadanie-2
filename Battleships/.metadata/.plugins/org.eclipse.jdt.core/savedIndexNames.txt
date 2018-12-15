@@ -1,0 +1,20 @@
+INDEX VERSION 1.131+C:\Users\Kuba\Documents\ATJ\.metadata\.plugins\org.eclipse.jdt.core
+3794211119.index
+2181711717.index
+4051408843.index
+268458051.index
+1299478476.index
+322481308.index
+2709119483.index
+2776517245.index
+3303744787.index
+2699544402.index
+4038915570.index
+2517276046.index
+848318668.index
+1843736190.index
+2905880099.index
+1585018400.index
+995395846.index
+2158312854.index
+1658480694.index

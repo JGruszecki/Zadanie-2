@@ -1,0 +1,152 @@
+package battleships.model;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Ship {
+	
+	public int health = 1;
+	public int x;
+	public int y;
+	public boolean isSet = false;
+	public boolean isDestroyed = false;
+	public boolean rotation = false;
+	/*
+	 * If horizontal - false
+	 * If vertical - true
+	 */
+	
+    public Ship(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setIsSet(boolean isSet) {
+        this.isSet = isSet;
+    }
+
+    public boolean getIsSet() {
+        return isSet;
+    }
+
+    public int getEndX() {
+        return endX;
+    }
+
+    public void setEndX(int endX) {
+        this.endX = endX;
+    }
+
+    public int getEndY() {
+        return endY;
+    }
+
+    public void setEndY(int endY) {
+        this.endY = endY;
+    }
+
+    public boolean hit() {
+        this.health--;
+        if (this.health == 0) {
+            this.isDestroyed = true;
+        }
+
+        return this.isDestroyed;
+    }
+
+    public boolean isDestroyed() {
+        return this.isDestroyed;
+    }
+    /*
+    public boolean checkCoords(ArrayList<ArrayList<Field>> board) {
+        for (int x = this.startX; x <= this.endX; x++) {
+            for (int y = this.startY; y <= this.endY; y++) {
+                if (x < 0 || y < 0 || x > 9 || y > 9 || (board.get(x).get(y).getShip() != null)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public void generateCoords(ArrayList<ArrayList<Field>> board) {
+        Random gen = new Random();
+        this.startX = gen.nextInt(10);
+        this.startY = gen.nextInt(10);
+        int dir = gen.nextInt(4);
+        boolean i = true;
+        while (i) {
+            //Go North
+            if (dir == 0) {
+                this.endX = this.startX;
+                this.endY = this.startY;
+                this.startY = this.startY - (this.size - 1);
+                if (this.checkCoords(board)) {
+
+                    i = false;
+                } else {
+                    this.startX = this.endX;    //Put starting positions back at beginning
+                    this.startY = this.endY;    //Put starting positions back at beginning
+                    dir++;
+                }
+            }
+
+            //Go East
+            if (dir == 1) {
+                this.endX = this.startX + (this.size - 1);
+                this.endY = this.startY;
+                if (this.checkCoords(board)) {
+                    i = false;
+                } else {
+                    dir++;
+                }
+            }
+
+            //Go South
+            if (dir == 2) {
+                this.endX = this.startX;
+                this.endY = this.startY + (this.size - 1);
+                if (this.checkCoords(board)) {
+                    i = false;
+                } else {
+                    dir++;
+                }
+            }
+
+            //Go West
+            if (dir == 3) {
+                this.endX = this.startX;
+                this.endY = this.startY;
+                this.startX = this.startX - (this.size - 1);
+                if (this.checkCoords(board)) {
+                    i = false;
+                }
+            }
+
+            //If no room available at this spot, try another
+            if (i) {
+                this.startX = gen.nextInt(10);
+                this.startY = gen.nextInt(10);
+                dir = gen.nextInt(4);
+            }
+
+        }
+    }
+	*/
+}

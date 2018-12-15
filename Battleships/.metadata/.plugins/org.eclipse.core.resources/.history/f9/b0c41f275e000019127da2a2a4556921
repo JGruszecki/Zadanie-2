@@ -1,0 +1,346 @@
+package battleships.controller;
+
+import battleships.model.*;
+	
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Random;
+
+
+public class Controller implements Initializable{
+	
+	static Producer producer;
+	Consumer consumer;
+	
+	PlayerBoard playerBoard;
+	EnemyBoard enemyBoard;
+
+	int playerShipsAmount = 8;
+	int enemyShipsAmount = 8;
+	int possibleShipSize = 5;
+	int counter = 0;
+	boolean rotation = true;
+	
+	@FXML
+	public GridPane playerDisplayBoard;
+	
+	@FXML
+	public GridPane enemyDisplayBoard;
+	
+	@FXML
+	public Button startButton;
+	
+	@FXML 
+	public Button resetButton;
+	
+	@FXML
+	public Button restartButton;
+	
+	@FXML
+	public ToggleButton changeRotationButton;
+	
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+    	playerBoard = new PlayerBoard(playerDisplayBoard);
+    	enemyBoard = new EnemyBoard(enemyDisplayBoard);
+    	playerBoard.createBoard();
+    	setPlayerBoard(playerBoard);
+    	startButton.disableProperty().set(true);
+    	restartButton.disableProperty().set(true);
+    }
+
+
+    @FXML
+    public void startButtonClicked(ActionEvent event) {
+    	playerShipsAmount = 8;
+    	enemyBoard.createBoard();
+    	setEnemyBoard(enemyBoard);
+    	
+    	playerBoard.setFieldsState(true);
+    	enemyBoard.setFieldsState(false);
+    	enemyBoard.placeShips();;
+    	
+    	startButton.disableProperty().set(true);
+    	resetButton.disableProperty().set(true);
+    }
+    
+    @FXML
+    public void resetButtonClicked(ActionEvent event)  {
+    	playerShipsAmount = 8;
+    	possibleShipSize = 5;
+    	counter = 0;
+    	
+    	
+    	playerBoard.createBoard();
+    	setPlayerBoard(playerBoard);
+    	playerBoard.setFieldsState(false);
+    	playerBoard.destroyAllShips();
+
+    	startButton.disableProperty().set(true);
+
+    }
+    
+    @FXML
+    public void restartButtonClick(ActionEvent event) {
+    	enemyShipsAmount = 8;
+    	playerShipsAmount = 8;
+    	possibleShipSize = 5;
+    	
+    	playerBoard.createBoard();
+    	setPlayerBoard(playerBoard);
+    	playerBoard.setFieldsState(false);
+    	
+    	enemyBoard.createBoard();
+    	enemyBoard.setFieldsState(true);
+    	playerBoard.resetHits();
+    	
+    	enemyBoard.destroyAllShips();
+    	playerBoard.destroyAllShips();
+    	
+    	startButton.disableProperty().set(true);
+    	restartButton.disableProperty().set(true);
+    	resetButton.disableProperty().set(false);
+    }
+    
+    @FXML
+    public void changeRotation(ActionEvent event) {
+    	rotation = !rotation;
+    }
+    
+    public void setPlayerBoard(PlayerBoard board) {
+    	for (Node node : playerDisplayBoard.getChildren()) {
+    		if(node instanceof Rectangle) {
+            Rectangle rect = (Rectangle) node;
+            rect.disableProperty().set(false);
+            rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                Rectangle r = (Rectangle) event.getSource();
+                int col = GridPane.getColumnIndex(r);
+                int row = GridPane.getRowIndex(r);
+                if (playerBoard.gameBoard.get(col).get(row).checkIfClicked()) {
+                    return;
+                }
+                if(possibleShipSize > 1) {
+                	Ship ship =  new Ship(col, row, possibleShipSize);
+                	if(board.addShip(ship, rotation)) {
+                		counter++;
+                		if(counter == 2) {
+                			possibleShipSize--;
+                			counter = 0;
+                		}
+                	}
+                	
+                }
+                if(possibleShipSize == 1) {
+                	startButton.disableProperty().set(false);
+                	playerBoard.setFieldsState(true);
+                }
+                //System.out.println(col);
+                //System.out.println(row);
+                if(r.getFill().equals(Color.GREEN))
+                	r.disableProperty().set(true);
+            }
+            });
+            
+            
+            rect.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if (!playerBoard.gameBoard.get(GridPane.getColumnIndex(rect)).get(GridPane.getRowIndex(rect)).checkIfClicked()) {
+                        int col = GridPane.getColumnIndex(rect);
+                        int row = GridPane.getRowIndex(rect);
+                    	if(rotation) {
+                    		for(int i = 0; i < possibleShipSize; i++) {
+                    			if(col > 9)
+                    				break;
+                    			Node n = playerBoard.getNode(col, row);
+                    			Rectangle r = (Rectangle) n;
+                            	r.setStrokeWidth(3.0);
+                            	r.setStroke(Color.GREEN);
+                    			col++;
+                    		}
+                    	}
+                    	else{
+                    		for(int i = 0; i < possibleShipSize; i++) {
+                    			if(row > 9)
+                    				break;
+                    			Node n = playerBoard.getNode(col, row);
+                    			Rectangle r = (Rectangle) n;
+                            	r.setStrokeWidth(3.0);
+                            	r.setStroke(Color.GREEN);
+                    			row++;
+                    		}
+                    	}
+                    }
+                }
+            });
+
+            
+            rect.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    int col = GridPane.getColumnIndex(rect);
+                    int row = GridPane.getRowIndex(rect);
+                	if(rotation) {
+                		for(int i = 0; i < 5; i++) {
+                			if(col > 9)
+                				break;
+                			Node n = playerBoard.getNode(col, row);
+                			Rectangle r = (Rectangle) n;
+                        	r.setStrokeWidth(1.0);
+                        	r.setStroke(Color.BLACK);
+                			col++;
+                		}
+                	}
+                	else{
+                		for(int i = 0; i < 5; i++) {
+                			if(row > 9)
+                				break;
+                			Node n = playerBoard.getNode(col, row);
+                			Rectangle r = (Rectangle) n;
+                        	r.setStrokeWidth(1.0);
+                        	r.setStroke(Color.BLACK);
+                			row++;
+                		}
+                	}
+                }
+            });
+            
+            
+    		}
+    	}
+    }
+    
+    public void setEnemyBoard(EnemyBoard board) {
+    	for (Node node : enemyDisplayBoard.getChildren()) {
+    		if(node instanceof Rectangle) {
+            Rectangle rect = (Rectangle) node;
+            rect.disableProperty().set(false);
+            rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                Rectangle r = (Rectangle) event.getSource();
+                int col = GridPane.getColumnIndex(r);
+                int row = GridPane.getRowIndex(r);
+                if (enemyBoard.gameBoard.get(col).get(row).checkIfClicked()) {
+                    return;
+                }
+                //System.out.println(col);
+                enemyBoard.checkField(col, row);
+                if (r.getFill().equals(Color.RED))
+                	enemyShipsAmount--;
+                
+                enemyGuess();
+                checkGameState();
+                
+            }
+            });
+            
+            rect.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                    if (!enemyBoard.gameBoard.get(GridPane.getColumnIndex(rect)).get(GridPane.getRowIndex(rect)).checkIfClicked())
+                    	rect.setStrokeWidth(3.0);
+                    	rect.setStroke(Color.BLUE);
+                }
+            });
+
+            rect.setOnMouseExited(new EventHandler<MouseEvent>() {
+                public void handle(MouseEvent event) {
+                	rect.setStrokeWidth(1.0);
+                	rect.setStroke(Color.BLACK);
+                }
+            });
+    		}
+    	}
+    }
+    
+    public void generateRandom() {
+    	int col;
+    	int row;
+		Random rand = new Random();
+    	for(int i = 0; i < 15; i++) {
+    		col = rand.nextInt(9);
+    		row = rand.nextInt(9);
+    		System.out.println(col);
+    		if(enemyBoard.gameBoard.get(col).get(row).getShip() == null) {
+    	    	Ship ship =  new Ship(col, row, 1);
+    	    	enemyBoard.addShip(ship, true);
+    		}
+    		else
+    			i--;
+    	}
+    }
+    
+    public void enemyGuess() {
+		Random rand = new Random();
+		int col = rand.nextInt(10);
+		int row = rand.nextInt(10);
+		while(true) {
+			if((playerBoard.gameBoard.get(col).get(row).getHit())) {
+				col = rand.nextInt(10);
+				row = rand.nextInt(10);
+			}
+			else
+				break;
+		}
+		Ship ship = null;
+        ship = playerBoard.gameBoard.get(col).get(row).getShip();
+        Node node = playerBoard.getNode(col, row);
+        Rectangle rect = (Rectangle) node;
+        if (ship != null) { 
+            rect.setFill(Color.AQUA);
+            ship.hit();
+            if(ship.getHealth() == 0) {
+                for (int x = ship.getX(); x <= ship.getEndX(); x++) {
+                    for (int y = ship.getY(); y <= ship.getEndY(); y++) {
+                        Node node2 = playerBoard.getNode(x, y);
+                        Rectangle rect2 = (Rectangle) node2;
+                        rect2.setFill(Color.RED);
+                        playerShipsAmount--;
+                    }
+
+                }
+            }
+        }
+        else
+            rect.setFill(Color.WHITE);
+    	playerBoard.gameBoard.get(col).get(row).setHit(true);
+    }
+    
+    public void checkGameState() {
+        if(enemyShipsAmount == 0) {
+            Alert winAlert = new Alert(AlertType.INFORMATION);
+            winAlert.setTitle("VICTORY");
+            winAlert.setContentText("You Win!");
+            winAlert.setHeaderText(null);
+            winAlert.showAndWait();
+            restartButton.disableProperty().set(false);
+            enemyBoard.setFieldsState(true);
+        }
+        if(playerShipsAmount == 0) {
+            Alert loseAlert = new Alert(AlertType.INFORMATION);
+            loseAlert.setTitle("DEFEAT");
+            loseAlert.setHeaderText(null);
+            loseAlert.setContentText("You Lose...");
+            loseAlert.showAndWait();
+            restartButton.disableProperty().set(false);
+            enemyBoard.setFieldsState(true);
+        }
+    }
+    
+    public void resetVariables() {
+    	
+    }
+
+}

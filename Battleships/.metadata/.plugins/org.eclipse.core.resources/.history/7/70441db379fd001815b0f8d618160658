@@ -1,0 +1,48 @@
+package battleships.model;
+
+
+public class Ship {
+	
+	public int x;
+	public int y;
+	public int health;
+	public int size;
+	
+	
+    public Ship(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Ship(int x, int y, int size) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.health = size;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    public int getHealth() {
+    	return health;
+    }
+    
+    public void hit() {
+    	this.health--;
+    }
+
+}

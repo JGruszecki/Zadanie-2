@@ -1,0 +1,79 @@
+package battleships.model;
+
+import java.util.Random;
+
+public class Ship {
+	
+	public int x;
+	public int y;
+	public int endX;
+	public int endY;
+	public int health;
+	public int size;
+	public int name;
+	
+	
+    public Ship(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Ship(int x, int y, int size) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.health = size;
+        Random rand = new Random();
+        this.name = rand.nextInt(20) + 11;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    public int getEndX() {
+    	return endX;
+    }
+    
+    public void setEndX(int x) {
+    	this.endX = x;
+    }
+    
+    public int getEndY() {
+    	return endY;
+    }
+    
+    public void setEndY(int y) {
+    	this.endY = y;
+    }
+    
+    public int getSize() {
+    	return size;
+    }
+    
+    public int getHealth() {
+    	return health;
+    }
+    
+    public void hit() {
+    	this.health--;
+    	System.out.print("NAME: ");
+    	System.out.println(health);
+    	System.out.print("HEALTH: ");
+    	System.out.println(health);
+    	
+    }
+
+}

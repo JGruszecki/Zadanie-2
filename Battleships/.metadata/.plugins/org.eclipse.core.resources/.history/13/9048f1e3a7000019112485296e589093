@@ -1,0 +1,46 @@
+package battleships.model;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import javafx.scene.layout.GridPane;
+
+public class EnemyBoard extends Board{
+	
+    public EnemyBoard(GridPane gridPane) {
+        super(gridPane);
+        this.isPlayerBoard = false;
+    }
+    
+    @Override
+    public void createBoard() {
+        for (int x = 0; x < 10; x++) {
+            ArrayList<Field> row = new ArrayList(10);
+            for (int y = 0; y < 10; y++) {
+                row.add(new Field());
+            }
+            gameBoard.add(row);
+        }      
+        ships.clear();
+        this.clearDisplayBoard();
+    }
+    
+    public void placeShips() {
+    	int initialSize = 5;
+    	int col;
+    	int row;
+    	boolean rotation = false;
+		Random rand = new Random();
+    	for(int i = 0; i < 4; i++) {
+    		for(int j = 0; j < 2; j++) {
+    			col = rand.nextInt(9);
+    			row = rand.nextInt(9);
+    			Ship ship =  new Ship(col, row, initialSize);
+    			if(!this.addShip(ship, rotation))
+    				j--;
+    		}
+    		rotation = !rotation;
+    		initialSize--;
+    	}
+    }
+}

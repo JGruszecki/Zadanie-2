@@ -1,0 +1,6 @@
+package battleships.model;
+
+public class EnemyBoard extends Board{
+	
+
+}

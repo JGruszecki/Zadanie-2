@@ -1,0 +1,8 @@
+package battleships.model;
+
+import battleships.Board;
+
+public class EnemyBoard extends Board{
+	
+
+}

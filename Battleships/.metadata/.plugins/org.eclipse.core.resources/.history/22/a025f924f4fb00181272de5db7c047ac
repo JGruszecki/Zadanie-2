@@ -1,0 +1,22 @@
+package battleships.model;
+
+public class Ship {
+	
+	public int size;
+	public boolean isDead = false;
+	public int hits;
+	public boolean position = false;
+	/*
+	 * If horizontal - false
+	 * If vertical - true
+	 */
+	
+	public Ship(int size, boolean position) {
+		this.size = size;
+		this.position = position;
+	}
+	public void hit() {
+		this.hits++;
+	}
+
+}

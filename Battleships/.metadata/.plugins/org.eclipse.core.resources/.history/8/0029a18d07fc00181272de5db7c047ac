@@ -1,0 +1,21 @@
+package battleships.model;
+
+public class EnemyBoard extends Board{
+	
+	public boolean isSet = false;
+	public int health;
+	public boolean isDead = false;
+	public int hits;
+	
+	public void hit() {
+		this.hits++;
+	}
+	
+	public boolean isDead() {
+		if(this.hits == this.health)
+			isDead = true;
+		else
+			isDead = false;
+		return isDead;
+	}
+}

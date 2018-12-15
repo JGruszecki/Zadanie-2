@@ -1,0 +1,26 @@
+package battleships.model;
+
+import java.util.ArrayList;
+
+import javafx.scene.layout.GridPane;
+
+public class EnemyBoard extends Board{
+	
+    public EnemyBoard(GridPane gridPane) {
+        super(gridPane);
+        this.isEnemyBoard = false;
+    }
+    
+    @Override
+    public void createBoard() {
+        for (int x = 0; x < 10; x++) {
+            ArrayList<Field> row = new ArrayList(10);
+            for (int y = 0; y < 10; y++) {
+                row.add(new Field());
+            }
+            gameBoard.add(row);
+        }      
+        ships.clear();
+        this.clearDisplayBoard();
+    }
+}

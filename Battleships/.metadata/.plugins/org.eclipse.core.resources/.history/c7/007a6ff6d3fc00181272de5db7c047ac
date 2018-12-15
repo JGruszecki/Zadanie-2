@@ -1,0 +1,54 @@
+package battleships.model;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Ship {
+	
+	public int health = 1;
+	public int x;
+	public int y;
+	public boolean isSet = false;
+	public boolean isDestroyed = false;
+	public boolean rotation = false;
+	/*
+	 * If horizontal - false
+	 * If vertical - true
+	 */
+	
+    public Ship(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+    public boolean hit() {
+        this.health--;
+        if (this.health == 0) {
+            this.isDestroyed = true;
+        }
+
+        return this.isDestroyed;
+    }
+
+    public boolean isDestroyed() {
+        return this.isDestroyed;
+    }
+
+}
